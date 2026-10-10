@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dashboard interativo para análise de vendas da hamburgueria.">
+  <title>Vendas em foco | Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="startupScreen" class="startup-screen" role="status" aria-live="polite">
+    <div class="startup-content">
+      <span class="startup-mark" aria-hidden="true"></span>
+      <p class="startup-kicker">ANÁLISE DE DADOS</p>
+      <strong>Visão geral das vendas.</strong>
+      <span class="startup-line"><i></i></span>
+      <small>Preparando o painel</small>
+    </div>
+  </div>
+  <main class="container">
+    <header class="hero">
+      <div>
+        <div class="brand-line"><span class="food-mark" aria-hidden="true"></span><p class="eyebrow">FUNDAMENTOS DE IA E ANÁLISE DE DADOS</p></div>
+        <h1>Visão geral das vendas<span>.</span></h1>
+        <p class="subtitle">Acompanhe o faturamento, o desempenho das categorias e a evolução semanal da operação.</p>
+      </div>
+      <button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menu">☰</button>
+      <nav id="mainNav" class="main-nav" aria-label="Navegação principal">
+        <button class="tab-link active" type="button" data-tab="overview" aria-selected="true">Visão geral</button>
+        <button class="tab-link" type="button" data-tab="charts" aria-selected="false">Gráficos</button>
+        <button class="tab-link" type="button" data-tab="table" aria-selected="false">Tabela</button>
+      </nav>
+      <div class="hero-actions">
+        <span id="baseStatus" class="status-pill"><span class="status-dot"></span> Base demonstrativa</span>
+        <label class="button button-primary" for="csvInput">Importar CSV</label>
+        <input id="csvInput" type="file" accept=".csv,text/csv" hidden>
+      </div>
+    </header>
+
+    <section class="notice" aria-live="polite">
+      <span class="notice-icon">i</span>
+      <div><strong>Como ler este painel</strong><br><span id="dataMessage">Os dados demonstrativos foram carregados localmente no navegador.</span></div>
+    </section>
+
+    <section id="filters" class="filters panel tab-panel tab-overview" aria-labelledby="filters-title">
+      <div class="section-heading compact"><div><p class="eyebrow">CONTROLE DA ANÁLISE</p><h2 id="filters-title">Filtros</h2></div><button id="clearFilters" class="button button-ghost" type="button">Limpar filtros</button></div>
+      <div class="filter-grid">
+        <div class="field"><label for="dateStart">Data inicial</label><input id="dateStart" type="date"></div>
+        <div class="field"><label for="dateEnd">Data final</label><input id="dateEnd" type="date"></div>
+        <div class="field"><label for="categoryFilter">Categoria</label><select id="categoryFilter"><option value="">Todas as categorias</option></select></div>
+        <div class="field"><label for="productFilter">Produto</label><select id="productFilter"><option value="">Todos os produtos</option></select><small>Filtre uma opção específica do cardápio.</small></div>
+      </div>
+    </section>
+
+    <section id="metrics" class="metrics tab-panel tab-overview" aria-label="Indicadores principais">
+      <article class="metric-card accent-blue"><div class="metric-label">Faturamento total <span class="metric-icon">R$</span></div><strong id="totalRevenue">R$ 0,00</strong><span class="metric-help">Soma das vendas filtradas</span></article>
+      <article class="metric-card accent-green"><div class="metric-label">Quantidade de vendas <span class="metric-icon">#</span></div><strong id="saleCount">0</strong><span class="metric-help">IDs únicos</span></article>
+      <article class="metric-card accent-orange"><div class="metric-label">Unidades vendidas <span class="metric-icon">↗</span></div><strong id="unitCount">0</strong><span class="metric-help">Soma das quantidades</span></article>
+      <article class="metric-card accent-purple"><div class="metric-label">Ticket médio <span class="metric-icon">÷</span></div><strong id="averageTicket">R$ 0,00</strong><span class="metric-help">Faturamento ÷ vendas</span></article>
+    </section>
+
+    <section id="charts" class="charts-grid tab-panel tab-overview tab-charts">
+      <article class="panel chart-panel wide"><div class="section-heading"><div><p class="eyebrow">EVOLUÇÃO</p><h2>Faturamento mensal</h2></div><span class="unit-label">Em reais (R$)</span></div><div class="chart-wrap"><canvas id="monthlyChart" aria-label="Gráfico de linha do faturamento mensal"></canvas></div></article>
+      <article class="panel chart-panel"><div class="section-heading"><div><p class="eyebrow">COMPARAÇÃO</p><h2>Por categoria</h2></div><span class="unit-label">Em reais (R$)</span></div><div class="chart-wrap"><canvas id="categoryChart" aria-label="Gráfico de barras do faturamento por categoria"></canvas></div></article>
+      <article class="panel chart-panel"><div class="section-heading"><div><p class="eyebrow">DESEMPENHO</p><h2>Top produtos</h2></div><span class="unit-label">Em reais (R$)</span></div><div class="chart-wrap"><canvas id="productChart" aria-label="Gráfico de barras do faturamento por produto"></canvas></div></article>
+      <article class="panel chart-panel"><div class="section-heading"><div><p class="eyebrow">PARTICIPAÇÃO</p><h2>Vendas por categoria</h2></div><span class="unit-label">Participação nas vendas</span></div><div class="chart-wrap pie-wrap"><canvas id="categoryPieChart" aria-label="Gráfico de pizza da participação das vendas por categoria"></canvas></div></article>
+      <article class="panel chart-panel"><div class="section-heading"><div><p class="eyebrow">COMPARAÇÃO</p><h2>Por semana</h2></div><span class="unit-label">Em reais (R$)</span></div><div class="chart-wrap"><canvas id="weeklyChart" aria-label="Gráfico de barras do faturamento por semana"></canvas></div></article>
+    </section>
+
+    <section id="table" class="panel table-panel tab-panel tab-overview tab-table">
+      <div class="section-heading table-heading"><div><p class="eyebrow">DETALHAMENTO</p><h2>Vendas filtradas</h2><p id="recordCount" class="muted">0 registros exibidos</p></div><div class="table-actions"><label class="search-box"><span>⌕</span><input id="tableSearch" type="search" placeholder="Pesquisar na tabela" aria-label="Pesquisar na tabela"></label><button id="exportCsv" class="button button-secondary" type="button">Exportar CSV</button></div></div>
+      <div id="noResults" class="no-results" hidden>Nenhum registro corresponde aos filtros atuais. Tente ampliar o período ou limpar os filtros.</div>
+      <div class="table-scroll"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div>
+    </section>
+    <footer><span>Dashboard educacional · dados demonstrativos</span><span id="validationMessage"></span></footer>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
